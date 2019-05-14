@@ -40,7 +40,7 @@
                                     <td>{{ $detail->quantity }}</td>
                                     <td>{{ $detail->total }}</td>
 
-                                    <td><button class="btn btn-button btn-block btn-primary text-white"><a href="{{route('orderdetails.destroy',[$detail->id])}}" class="text-white">Delete</a></button></td>
+                                    <td><button class="btn btn-button btn-block btn-primary text-white"><a href="{{route('orders.destroy',[$detail->id])}}" class="text-white">Delete</a></button></td>
 
 
                                 </tr>

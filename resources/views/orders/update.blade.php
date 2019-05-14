@@ -1,62 +1,110 @@
 @extends('layouts.app')
 
 @section('content')
-
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-8">
+            <div class="col-md-10">
                 <div class="card">
-                    <div class="card-header">Edit Order</div>
+                    <div class="card-header">Order Details</div>
 
                     <div class="card-body">
 
-                        <form action="{{ route('orders.update',[$order->id]) }}" method="post">
+                        <div>
 
-                            @csrf
-                            @method('PUT')
+                            <table class="table table-bordered">
 
-                            <div class="form-group">
-                                <label >Customer Name </label>
-                                <select name="customer_id" class="form-control">
+                                <tr><td class="font-weight-bold">Customer Name</td><td>{{ $order->customer->name }}</td></tr>
+                                <tr><td class="font-weight-bold">Phone No</td><td>{{ $order->customer->phone }}</td></tr>
+                                <tr><td class="font-weight-bold">Status</td><td>{{ $order->shipped }}</td></tr>
+                                <tr><td class="font-weight-bold">Order Total</td><td>{{ $order->total }}</td></tr>
 
-                                    <option value="{{ $order->customer->id }}" selected>{{ $order->customer->name }}</option>
-
-                                    @foreach($customers as $customer)
-
-                                        <option value="{{ $customer->id }}">{{ $customer->name }}</option>
-                                    @endforeach
-
-                                </select>
-                                @if($errors->has('customer_id'))
-                                    <p class="text-danger">{{ $errors->first('customer_id') }}</p>
-                                @endif
-
-                            </div>
+                            </table>
 
 
 
-                            <div class="form-group">
-                                <label>Order Total </label>
-                                <input type="text" name="total"  class="form-control" value="{{$order->total }}">
-                                @if($errors->has('total'))
-                                    <p class="text-danger">{{ $errors->first('total') }}</p>
-                                @endif
-
-                            </div>
-
-                            <button class="btn btn-button btn-block">Save</button>
 
 
+                        </div>
 
-                        </form>
 
+                        <div class="details">
+
+                            <table class="table table-bordered">
+                                @foreach($order->details As $detail)
+                                <tr>
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td>{{ $detail->product->name }}</td>
+                                    <td>{{ $detail->quantity }}</td>
+                                    <td>{{ $detail->total }}</td>
+
+                                </tr>
+                                @endforeach
+
+                            </table>
+
+                        </div>
+
+                        @if(!$order->shipped)
+
+
+                            <table class="table">
+
+                                <thead>
+
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Name</th>
+                                        <th>Price</th>
+                                        <th>Add</th>
+                                    </tr>
+
+                                <tbody>
+
+                                        @foreach($products AS $product)
+
+                                            <tr>
+
+                                                <td> {{ $loop->iteration }}</td>
+                                                <td> {{ $product->name }}</td>
+                                                <td> {{ $product->price }}</td>
+                                                <td>
+                                                    <form class="form-inline" action="{{ route('orders.update',[$order->id ]) }}" method="post">
+                                                        @csrf
+                                                        @method('PUT')
+
+                                                        <input type="hidden" name="product_id" value="{{$product->id }}" class="form-control">
+                                                        <input type="number" value="1"  name="quantity" min="1" class="form-control">
+
+                                                        <button class="btn btn-success">Add</button>
+
+                                                    </form>
+
+                                                </td>
+
+                                            </tr>
+
+                                        @endforeach
+
+
+                                </tbody>
+
+                                </thead>
+
+
+                            </table>
+
+
+
+                        @endif
 
 
                     </div>
+
+
+
 
                 </div>
             </div>
         </div>
     </div>
-
 @endsection

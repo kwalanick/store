@@ -112,6 +112,20 @@
         @include('partials.success')
         @include('partials.errors')
 
+
+{{--
+
+        @if(session('success'))
+
+            <div class="container">
+            <div class="alert alert-success">
+                <p>{{ session('success') }}</p>
+            </div>
+            </div>
+
+        @endif
+--}}
+
         <main class="py-4">
             @yield('content')
         </main>

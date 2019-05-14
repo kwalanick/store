@@ -15,6 +15,12 @@ class OrdersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+
     public function index()
     {
         //
@@ -77,16 +83,15 @@ class OrdersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(OrderDetail $order)
+    public function show($id)
     {
 
         //
         $products = Product::orderBy('id','DESC')->get();
-        $details = OrderDetail::find($order->order()->get('id'));
+        $order = Order::find($id);
 
-        //dd($details);
 
-        return view('orders.orderDetails',compact('details','order','products'));
+        return view('orders.update',compact('order','products'));
     }
 
     /**
@@ -101,6 +106,8 @@ class OrdersController extends Controller
         $customers = Customer::orderBy('id','DESC')->get();
 
         $order = Order::find($order->id);
+
+
 
         return view('orders.update',compact('order','customers'));
 
@@ -117,20 +124,30 @@ class OrdersController extends Controller
     public function update(Request $request, Order $order)
     {
         //
-        $orderUpdate = Order::find($order->id)->update([
 
-            'customer_id'=>$request->customer_id,
-            'total'=>$request->total,
-            'shipped'=>false
+        $request->validate([
 
+            'quantity'=>'required|integer|min:1'
         ]);
 
-        if($orderUpdate)
-        {
-            return redirect()->route('orders.index')->with('success','Order Updated');
-        }
 
-        return back()->withInput()->with('error','Order Update failed');
+        $order = Order::find($order->id);
+
+        $product = Product::find($request->product_id);
+
+        $order->total +=$product->price * $request->quantity;
+
+        $order->save();
+
+        OrderDetail::create([
+
+            'order_id'=>$order->id,
+            'product_id'=>$request->product_id,
+            'quantity'=>$request->quantity,
+            'total'=>$product->price * $request->quantity,
+        ]);
+
+        return back()->withInput()->with('success','Order Updated');
     }
 
     /**

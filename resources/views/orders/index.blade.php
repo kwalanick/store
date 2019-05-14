@@ -4,8 +4,9 @@
 
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-8">
+            <div class="col-md-12">
                 <div class="card">
+
                     <div class="card-header">
                         All Orders
 
@@ -43,9 +44,11 @@
                                     <td>{{ $order->total }}</td>
                                     <td>{{ $order->shipped?'Shipped':'Pending' }}</td>
 
-                                    <td><button class="btn btn-button btn-block btn-primary text-white"><a href="{{route('orders.show',[$order->id])}}" class="text-white">Order Details</a></button></td>
+                                    <td><button class="btn btn-button btn-block btn-primary text-white"><a href="{{route('orders.show',[$order->id])}}" class="text-white">Details</a></button></td>
                                     <td><button class="btn btn-button btn-block btn-success text-white"><a href="{{route('orders.edit',[$order->id])}}" class="text-white">edit</a></button></td>
-                                    <td><button class="btn btn-button btn-block btn-danger text-white">
+                                    <td>
+                                        @if(!$order->shipped)
+                                        <button class="btn btn-button btn-block btn-danger text-white">
 
                                             <a href="#" class="text-white" onclick="
 
@@ -65,13 +68,29 @@
 
                                                 @csrf
                                                 @method('DELETE')
-                                                <input type="hidden" name="del" id="del" value="{{ $order->id }}">
+
 
                                             </form>
 
+
+
                                         </button>
+                                        @endif
+
 
                                     </td>
+
+                                    <!-- Alternative -->
+
+
+
+                                     {{--  <form action="{{ route('orders.destroy',[ $order->id ]) }}" method="post">
+                                              @csrf
+                                              @method('DELETE')
+                                              <button class="btn btn-danger">Removw</button>
+                                      </form>--}}
+
+
 
                                 </tr>
                             @endforeach
