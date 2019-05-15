@@ -11,7 +11,8 @@ class Customer extends Model
 
         'name',
         'phone',
-        'address'
+        'address',
+        'email'  //php artisan make:mail OrderMail
     ];
 
     public function orders()

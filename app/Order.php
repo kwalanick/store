@@ -11,7 +11,9 @@ class Order extends Model
 
         'customer_id',
         'total',
-        'shipped'
+        'shipped',
+        'user_id' // Adding New Column - php artisan make:migration add_user_id_to_orders
+
 
     ];
 

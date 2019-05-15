@@ -41,6 +41,15 @@
 
                             </div>
 
+                            <div class="form-group">
+                                <label>Customers Email </label>
+                                <input type="email" name="email"  class="form-control" value="{{ old('email') }}">
+                                @if($errors->has('email'))
+                                    <p class="text-danger">{{ $errors->first('email') }}</p>
+                                @endif
+
+                            </div>
+
                             <button class="btn btn-button btn-block">Save</button>
 
 

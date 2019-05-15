@@ -3,10 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Customer;
+use App\Jobs\SendEmailJob;
+use App\Mail\OrderMail;
 use App\Order;
 use App\OrderDetail;
 use App\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class OrdersController extends Controller
 {
@@ -64,18 +68,43 @@ class OrdersController extends Controller
         $order = Order::create([
 
             'customer_id'=>$request->customer_id,
+            'user_id'=> Auth::user()->id,
             'total'=>0
 
         ]);
 
+        $customer = Customer::find($request->customer_id);
+
         if($order)
         {
+           // $email = new OrderMail();
+           //Mail::to('kwalanick@gmail.com')->send($email);
+
+            $this->dispatch(new SendEmailJob($customer,$order));
+
             return redirect()->route('orders.index')->with('success','Order Created');
         }
 
         return back()->withInput()->with('error','Order creation Failed!');
 
     }
+
+    //Policy
+    //php artisan make:policy OrderPolicy --model=Order
+
+    //php artisan make:job SendEmailJob
+    //queues
+    //queue driver == database redis beanstalk aws
+    //php artisan queue:table
+
+    // Change Queue Connection in .env to database
+
+    // Dispatch Queue
+
+    // Start a Queue
+    // php artisan queue:work
+
+
 
     /**
      * Display the specified resource.

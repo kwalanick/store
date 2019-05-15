@@ -50,14 +50,16 @@ class CustomersController extends Controller
 
             'name'=>'required|min:5',
             'phone'=>'required|unique:customers',
-            'address'=>'required'
+            'address'=>'required',
+            'email'=>'required|email',
 
         ]);
 
         $customers = Customer::create([
             'name'=>$request->name,
             'phone'=>$request->phone,
-            'address'=>$request->address
+            'address'=>$request->address,
+            'email'=>$request->email,
 
         ]);
 

@@ -17,11 +17,13 @@ class CreateOrdersTable extends Migration
             $table->bigIncrements('id');
 
             $table->bigInteger('customer_id')->unsigned();
+
             $table->double('total',8,2);
             $table->boolean('shipped')->default(false);
 
 
             $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade');
+
 
 
 

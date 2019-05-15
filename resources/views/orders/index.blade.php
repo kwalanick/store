@@ -52,6 +52,7 @@
                                     <td><button class="btn btn-button btn-block btn-success text-white"><a href="{{route('orders.edit',[$order->id])}}" class="text-white">edit</a></button></td>
                                     <td>
                                         @if(!$order->shipped)
+                                        @can('delete',$order)
                                         <button class="btn btn-button btn-block btn-danger text-white">
 
                                             <a href="#" class="text-white" onclick="
@@ -79,6 +80,7 @@
 
 
                                         </button>
+                                        @endcan
                                         @endif
 
 

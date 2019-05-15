@@ -100,6 +100,7 @@
                                                 <td> {{ $product->name }}</td>
                                                 <td> {{ $product->price }}</td>
                                                 <td>
+                                                    @can('update',$order)
                                                     <form class="form-inline" action="{{ route('orders.update',[$order->id ]) }}" method="post">
                                                         @csrf
                                                         @method('PUT')
@@ -107,6 +108,7 @@
                                                         <input type="number" value="1"  name="quantity" min="1" class="form-control">
                                                         <button class="btn btn-success">Add</button>
                                                     </form>
+                                                    @endcan
 
                                                 </td>
 
