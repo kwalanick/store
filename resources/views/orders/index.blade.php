@@ -18,7 +18,7 @@
                     <div class="card-body">
 
 
-                        <table class="table table-bordered">
+                        <table class="table table-bordered" id="orders">
 
                             <thead>
 
@@ -28,6 +28,10 @@
                                 <th>Phone </th>
                                 <th>Total </th>
                                 <th>Order Status </th>
+
+                                <th></th>
+                                <th></th>
+                                <th></th>
 
 
                             </tr>
@@ -110,5 +114,18 @@
             </div>
         </div>
     </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js" defer></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js" defer></script>
+
+    <script type="application/javascript">
+
+        $(document).ready(function()
+        {
+            $('#orders').DataTable();
+        } );
+
+    </script>
 
 @endsection
