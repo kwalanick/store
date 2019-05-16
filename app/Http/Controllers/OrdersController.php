@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Customer;
 use App\Jobs\SendEmailJob;
+use App\Jobs\SendSmsJob;
 use App\Mail\OrderMail;
 use App\Order;
 use App\OrderDetail;
@@ -11,6 +12,9 @@ use App\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use AfricasTalking\SDK\AfricasTalking;
+use Safaricom\Mpesa\Mpesa;
+
 
 class OrdersController extends Controller
 {
@@ -80,12 +84,48 @@ class OrdersController extends Controller
            // $email = new OrderMail();
            //Mail::to('kwalanick@gmail.com')->send($email);
 
-            $this->dispatch(new SendEmailJob($customer,$order));
+            $phone = $customer->phone;
+            $message = "Your order number #".$order->id." has been dispatched";
+
+            //$this->sms($customer->phone, $message); -- direct
+
+            //$this->dispatch(new SendSmsJob($phone,$message)); // Background Process
+
+            //$this->dispatch(new SendEmailJob($customer,$order)); // Background Process
+
+            $this->pay();
+
 
             return redirect()->route('orders.index')->with('success','Order Created');
         }
 
         return back()->withInput()->with('error','Order creation Failed!');
+
+    }
+
+    public function pay()
+    {
+
+        $mpesa = new Mpesa();
+
+        $BusinessShortCode="174379";
+        $LipaNaMpesaPasskey="bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919";
+        $TransactionType="CustomerPayBillOnline";
+        $Amount="1";
+        $PartyA="254710492692";
+        $PartyB="174379";   // similar to business shortcode
+        $PhoneNumber="254710492692";
+        $CallBackURL="https://255c5130.ngrok.io/mpesa/confirm";
+        $AccountReference="Testing";
+        $TransactionDesc="Testing";
+        $Remarks="Testing";
+
+        $stkPushSimulation=$mpesa->STKPushSimulation($BusinessShortCode, $LipaNaMpesaPasskey,
+                                                     $TransactionType, $Amount, $PartyA, $PartyB,
+                                                     $PhoneNumber, $CallBackURL, $AccountReference,
+                                                     $TransactionDesc, $Remarks);
+
+        dd($stkPushSimulation);
 
     }
 

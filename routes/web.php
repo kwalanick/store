@@ -24,3 +24,6 @@ Route::resource('products','ProductsController');
 Route::resource('orders','OrdersController');
 
 
+Route::post('/mpesa/confirm','MpesaController@confirm');
+
+

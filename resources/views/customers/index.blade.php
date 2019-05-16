@@ -43,31 +43,17 @@
 
                                     <td><button class="btn btn-button btn-block btn-primary text-white"><a href="{{route('customers.index',[$customer->id])}}" class="text-white">view</a></button></td>
                                     <td><button class="btn btn-button btn-block btn-success text-white"><a href="{{route('customers.edit',[$customer->id])}}" class="text-white">edit</a></button></td>
-                                    <td><button class="btn btn-button btn-block btn-danger text-white">
+                                    <td>
+                                        <a href="#">
 
-                                            <a href="#" class="text-white" onclick="
-
-                                              var result = confirm('Are you sure you want to delete the Customer');
-
-                                              if(result)
-                                              {
-                                                  event.preventDefault();
-                                                  document.getElementById('delete-form').submit();
-                                              }
-
-                                            ">
-                                                delete
-                                            </a>
-
-                                            <form id="delete-form" action="{{route('customers.destroy',[$customer->id])}}" method="post" style="display: none;">
-
-                                               @csrf
-                                               @method('DELETE')
-                                                <input type="hidden" name="del" id="del" value="{{ $customer->id }}">
+                                            <form action="{{ route('customers.destroy',[$customer->id]) }}" method="post">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button class="btn btn-danger">Delete</button>
 
                                             </form>
 
-                                        </button>
+                                        </a>
 
                                     </td>
 

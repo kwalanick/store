@@ -104,9 +104,19 @@
                                                     <form class="form-inline" action="{{ route('orders.update',[$order->id ]) }}" method="post">
                                                         @csrf
                                                         @method('PUT')
+
+
                                                         <input type="hidden" name="product_id" value="{{$product->id }}" class="form-control">
-                                                        <input type="number" value="1"  name="quantity" min="1" class="form-control">
-                                                        <button class="btn btn-success">Add</button>
+
+                                                        <div class="col-sm-4">
+                                                            <input type="number" value="1"  name="quantity" min="1" class="form-control">
+                                                        </div>
+
+                                                        <div class="col-sm-4">
+                                                            <button class="btn btn-success">Add</button>
+                                                        </div>
+
+
                                                     </form>
                                                     @endcan
 
