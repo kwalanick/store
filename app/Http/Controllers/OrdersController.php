@@ -8,7 +8,9 @@ use App\Jobs\SendSmsJob;
 use App\Mail\OrderMail;
 use App\Order;
 use App\OrderDetail;
+use App\Payment;
 use App\Product;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -93,7 +95,7 @@ class OrdersController extends Controller
 
             //$this->dispatch(new SendEmailJob($customer,$order)); // Background Process
 
-            $this->pay();
+            $this->pay($order->id);
 
 
             return redirect()->route('orders.index')->with('success','Order Created');
@@ -103,7 +105,7 @@ class OrdersController extends Controller
 
     }
 
-    public function pay()
+    public function pay($order_id)
     {
 
         $mpesa = new Mpesa();
@@ -112,10 +114,10 @@ class OrdersController extends Controller
         $LipaNaMpesaPasskey="bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919";
         $TransactionType="CustomerPayBillOnline";
         $Amount="1";
-        $PartyA="254710492692";
+        $PartyA="254728068296";
         $PartyB="174379";   // similar to business shortcode
-        $PhoneNumber="254710492692";
-        $CallBackURL="https://255c5130.ngrok.io/mpesa/confirm";
+        $PhoneNumber="254728068296";
+        $CallBackURL="http://72aa666c.ngrok.io/mpesa/confirm";
         $AccountReference="Testing";
         $TransactionDesc="Testing";
         $Remarks="Testing";
@@ -124,6 +126,16 @@ class OrdersController extends Controller
                                                      $TransactionType, $Amount, $PartyA, $PartyB,
                                                      $PhoneNumber, $CallBackURL, $AccountReference,
                                                      $TransactionDesc, $Remarks);
+
+        $merchant_id = json_decode($stkPushSimulation)->MerchantRequestID;
+
+        Payment::create([
+
+            'order_id'=>$order_id,
+            'merchant_id'=>$merchant_id,
+            'date_paid'=>Carbon::now()
+
+        ]);
 
         dd($stkPushSimulation);
 

@@ -22,5 +22,5 @@ class VerifyCsrfToken extends Middleware
         //
         '/mpesa/confirm'
     ];
-    
+
 }

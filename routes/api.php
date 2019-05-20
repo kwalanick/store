@@ -13,6 +13,21 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
+/*Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
-});
+});*/
+
+// php artisan make:controller ApiController
+// postman tool
+
+Route::post('/create/customer','ApiController@create_customer');
+Route::post('/create/order','ApiController@create_order');
+
+Route::get('/get/customers','ApiController@get_customers');
+Route::get('/get/orders','ApiController@get_orders');
+
+Route::delete('/delete/order/{id}','ApiController@delete_order');
+
+Route::post('/login','ApiController@login');
+
+
